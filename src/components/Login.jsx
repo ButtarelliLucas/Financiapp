@@ -1,6 +1,11 @@
+import useStore from "../store";
+
 const Login = () => {
+  const login = useStore((state) => state.login);
+
   const handleLogin = () => {
-    alert("Simulación de login");
+    login({ name: "Juan", account: "12345" });
+    alert("Login exitoso");
   };
 
   return (
