@@ -152,7 +152,7 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
-          
+
            {/* Agregar el gráfico de torta */}
            <div style={styles.chartContainer}>
             <Pie data={pieData} options={pieOptions} />
@@ -162,6 +162,7 @@ const Dashboard = () => {
           <div style={styles.chartContainer}>
             <Bar data={barData} options={barOptions} />
           </div>
+          <br />
 
          
         </>
