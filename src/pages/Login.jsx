@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../store';
-import { login as apiLogin } from '../api/api';
+import { apiLogin } from '../api/api'; // Importa 'apiLogin' correctamente
 
 const Login = () => {
   const [account, setAccount] = useState('');
@@ -11,7 +11,7 @@ const Login = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-  const login = useStore((state) => state.login);
+  const loginStore = useStore((state) => state.login); // Evitar conflictos de nombres
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +20,9 @@ const Login = () => {
 
     try {
       // Llama a la función de login del API simulada
-      const userData = await apiLogin(account, password);
+      const userData = await apiLogin(account, password); // Usa 'apiLogin' correctamente
       // Llama a la acción de login del store para actualizar el estado global
-      login(userData);
+      loginStore(userData);
       // Redirige al usuario al dashboard o página protegida
       navigate('/mi-cuenta');
     } catch (err) {
@@ -63,13 +63,10 @@ const Login = () => {
           {loading ? 'Iniciando...' : 'Iniciar Sesión'}
         </button>
       </form>
-      <div>
-
-      <p>account: 'test_user',</p>
-      <p>password: 'password123!', </p>
-      <p>account: 'admin_user',</p>
-      <p>password: 'adminpassword!',</p>
-
+      <div style={styles.credentials}>
+        <p><strong>Credenciales de Prueba:</strong></p>
+        <p>Cuenta: <code>test_user</code>, Contraseña: <code>password123!</code></p>
+        <p>Cuenta: <code>admin_user</code>, Contraseña: <code>adminpassword!</code></p>
       </div>
     </div>
   );
@@ -84,6 +81,7 @@ const styles = {
     border: '1px solid #ddd',
     borderRadius: '5px',
     backgroundColor: '#212121',
+    color: '#fff', // Asegura que el texto sea visible sobre el fondo oscuro
   },
   form: {
     display: 'flex',
@@ -97,6 +95,8 @@ const styles = {
     padding: '8px',
     marginTop: '5px',
     boxSizing: 'border-box',
+    borderRadius: '3px',
+    border: '1px solid #ccc',
   },
   button: {
     padding: '10px',
@@ -104,10 +104,18 @@ const styles = {
     color: 'white',
     border: 'none',
     cursor: 'pointer',
+    borderRadius: '3px',
+    fontSize: '16px',
   },
   error: {
     color: 'red',
     marginBottom: '15px',
+  },
+  credentials: {
+    marginTop: '20px',
+    backgroundColor: '#333',
+    padding: '10px',
+    borderRadius: '5px',
   },
 };
 
