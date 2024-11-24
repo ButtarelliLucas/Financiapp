@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Bienvenido a nuestra financiera</h1>
+      <h1>Bienvenido a Financiapp</h1>
       {isLoggedIn && userInfo ? (
         <>
           <p>Hola, {userInfo.name}! Accede a tu cuenta para ver tus detalles.</p>
