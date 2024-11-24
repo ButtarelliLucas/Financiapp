@@ -1,23 +1,45 @@
+// src/App.jsx
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/Login";
-import useStore from "./store";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
+import SessionExpired from "./pages/SessionExpired";
+import Unauthorized from "./pages/Unauthorized";
+import Navbar from "./components/Navbar";
+
+import "./App.css";
 
 function App() {
-  const user = useStore((state) => state.user);
-
   return (
     <Router>
-      <div>
-        {user ? (
-          <p>Usuario logueado: {user.name}, Cuenta: {user.account}</p>
-        ) : (
-          <p>No hay usuario logueado.</p>
-        )}
+      <Navbar />
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/mi-cuenta"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/configuracion"
+            element={
+              <RoleProtectedRoute allowedRoles={["admin"]}>
+                <Settings />
+              </RoleProtectedRoute>
+            }
+          />
+          <Route path="/sesion-expirada" element={<SessionExpired />} />
+          <Route path="/no-autorizado" element={<Unauthorized />} />
+        </Routes>
       </div>
-      <Routes>
-        <Route path="/" element={<div><h1>Bienvenido a la Financiera</h1> <Login /></div>} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
     </Router>
   );
 }
