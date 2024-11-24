@@ -161,8 +161,9 @@ const Dashboard = () => {
           {/* Agregar el gráfico de barras */}
           <div style={styles.chartContainer}>
             <Bar data={barData} options={barOptions} />
+
           </div>
-          <br />
+          
 
          
         </>
@@ -177,6 +178,7 @@ const Dashboard = () => {
 const styles = {
   container: {
     padding: '20px',
+    paddingBottom: '100px', // Añadido para espacio adicional
     position: 'relative',
   },
   table: {
