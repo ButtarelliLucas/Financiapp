@@ -1,55 +1,61 @@
 // src/components/ProtectedRoute.jsx
 import { useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useStore from "../store";
 
 const ProtectedRoute = ({ children }) => {
   const user = useStore((state) => state.user);
+  const isLoggingOut = useStore((state) => state.isLoggingOut);
   const logout = useStore((state) => state.logout);
   const updateExpiry = useStore((state) => state.updateExpiry);
   const navigate = useNavigate();
-  const location = useLocation();
   const sessionExpired = useRef(false);
   const timeoutRef = useRef(null);
-  const prevPathnameRef = useRef(location.pathname);
 
-  // **Efecto para manejar la expiración de la sesión**
   useEffect(() => {
-    console.log("Estado del usuario:", user);
+    console.log("ProtectedRoute - Estado del usuario:", user);
+    console.log("ProtectedRoute - isLoggingOut:", isLoggingOut);
 
-    if (sessionExpired.current) {
-      // Ya manejamos la redirección por sesión expirada
+    if (isLoggingOut) {
+      console.log("ProtectedRoute - Logout en progreso, no redirigir.");
       return;
     }
 
     if (!user || !user.token) {
       // Usuario no autenticado
+      console.log("ProtectedRoute - Usuario no autenticado.");
+
       if (!sessionExpired.current) {
-        console.log("Redirigiendo a no autorizado");
+        console.log("ProtectedRoute - Redirigiendo a no autorizado.");
         navigate("/no-autorizado");
       }
       return;
     }
 
+    // Reiniciar la expiración de la sesión al navegar dentro de rutas protegidas
+    updateExpiry();
+    console.log("ProtectedRoute - Sesión actualizada.");
+
     const timeLeft = user.expiry - Date.now();
-    console.log("Tiempo restante de sesión:", timeLeft);
+    console.log("ProtectedRoute - Tiempo restante de sesión:", timeLeft);
 
     if (timeLeft <= 0) {
       // Sesión expirada
       sessionExpired.current = true;
-      console.log("Sesión expirada");
+      console.log("ProtectedRoute - Sesión expirada por tiempo.");
       logout();
       navigate("/sesion-expirada");
     } else {
       // Limpiar timeout anterior si existe
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        console.log("ProtectedRoute - Timeout anterior limpiado.");
       }
 
-      // Establecer nuevo timeout para manejar la expiración
+      // Establecer nuevo timeout para manejar la expiración de la sesión
       timeoutRef.current = setTimeout(() => {
         sessionExpired.current = true;
-        console.log("Sesión expirada por timeout");
+        console.log("ProtectedRoute - Sesión expirada por timeout.");
         logout();
         navigate("/sesion-expirada");
       }, timeLeft);
@@ -59,21 +65,11 @@ const ProtectedRoute = ({ children }) => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        console.log("ProtectedRoute - Timeout limpiado al desmontar.");
       }
     };
-  }, [user, logout, navigate]);
-
-  // **Efecto para actualizar la expiración al navegar dentro de rutas protegidas**
-  useEffect(() => {
-    if (user && user.token) {
-      if (prevPathnameRef.current !== location.pathname) {
-        // La ruta ha cambiado, actualizamos la expiración
-        updateExpiry();
-        prevPathnameRef.current = location.pathname;
-      }
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [user, isLoggingOut, logout, navigate]);
 
   // Renderizar los hijos si el usuario está autenticado y la sesión es válida
   return user && user.token && user.expiry > Date.now() ? children : null;

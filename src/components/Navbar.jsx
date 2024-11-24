@@ -18,6 +18,9 @@ const Navbar = () => {
       {user ? (
         <>
           <Link to="/mi-cuenta">Mi Cuenta</Link>
+          {user.role === 'admin' && (
+            <Link to="/configuracion" >Configuración</Link>
+          )}
           <button onClick={handleLogout}>Cerrar Sesión</button>
         </>
       ) : (
@@ -28,3 +31,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
