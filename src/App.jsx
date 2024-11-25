@@ -12,9 +12,10 @@ import SessionExpired from "./pages/SessionExpired";
 import Unauthorized from "./pages/Unauthorized";
 import Navbar from "./components/Navbar";
 import useStore from "./store";
-
+import TestComponent from "./components/TestComponent";
 import "./App.css";
 
+import "./index.css";
 function App() {
   const initializeSession = useStore((state) => state.initializeSession);
   const updateExpiry = useStore((state) => state.updateExpiry);

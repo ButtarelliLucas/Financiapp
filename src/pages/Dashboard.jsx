@@ -1,7 +1,7 @@
 // src/pages/Dashboard.jsx
 import { useEffect } from 'react';
 import useStore from '../store';
-import { Bar, Pie } from 'react-chartjs-2'; // Importar Pie
+import { Bar, Pie } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -10,8 +10,8 @@ import {
   Title, 
   Tooltip, 
   Legend,
-  ArcElement,      // Importar ArcElement para gráficos de torta
-  PieController    // Importar PieController para gráficos de torta
+  ArcElement, 
+  PieController
 } from 'chart.js';
 import SessionTimer from '../components/SessionTimer';
 
@@ -22,8 +22,8 @@ ChartJS.register(
   Title, 
   Tooltip, 
   Legend,
-  ArcElement,      // Registrar ArcElement
-  PieController    // Registrar PieController
+  ArcElement, 
+  PieController
 );
 
 const Dashboard = () => {
@@ -39,7 +39,7 @@ const Dashboard = () => {
       loadInvestments(userInfo.token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo.token]); // Dependencia solo del token
+  }, [userInfo.token]);
 
   // Preparar datos para el gráfico de barras
   const barData = {
@@ -108,6 +108,17 @@ const Dashboard = () => {
         display: true,
         text: 'Distribución de Inversiones por Tipo',
       },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const label = context.label || '';
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: ${percentage}%`;
+          }
+        }
+      }
     },
   };
 
@@ -130,42 +141,27 @@ const Dashboard = () => {
         <p style={styles.error}>Error: {investmentsError}</p>
       ) : investments.length > 0 ? (
         <>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tipo</th>
-                <th>Monto</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {investments.map((inv) => (
-                <tr key={inv.id}>
-                  <td>{inv.id}</td>
-                  <td>{inv.type}</td>
-                  <td>${inv.amount.toLocaleString()}</td>
-                  <td>{inv.date}</td>
-                  <td>{inv.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Lista de Inversiones en Tarjetas */}
+          <div style={styles.investmentList}>
+            {investments.map((inv) => (
+              <div className= "bg-gray-900" key={inv.id} style={styles.card}>
+                <h4>{inv.type}</h4>
+                <p><strong>Monto:</strong> ${inv.amount.toLocaleString()}</p>
+                <p><strong>Fecha:</strong> {inv.date}</p>
+                <p><strong>Estado:</strong> {inv.status}</p>
+              </div>
+            ))}
+          </div>
 
-           {/* Agregar el gráfico de torta */}
-           <div style={styles.chartContainer}>
+          {/* Gráfico de Torta */}
+          <div style={styles.chartContainer}>
             <Pie data={pieData} options={pieOptions} />
           </div>
           
-          {/* Agregar el gráfico de barras */}
+          {/* Gráfico de Barras */}
           <div style={styles.chartContainer}>
             <Bar data={barData} options={barOptions} />
-
           </div>
-          
-
-         
         </>
       ) : (
         <p>No tienes inversiones registradas.</p>
@@ -174,23 +170,49 @@ const Dashboard = () => {
   );
 };
 
-// Estilos básicos
+// Estilos mejorados
 const styles = {
   container: {
     padding: '20px',
-    paddingBottom: '100px', // Añadido para espacio adicional
+    paddingBottom: '100px',
     position: 'relative',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginTop: '15px',
+    maxWidth: '1200px',
+    margin: '0 auto',
   },
   error: {
     color: 'red',
   },
   chartContainer: {
     marginTop: '30px',
+    width: '100%',
+    maxWidth: '600px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  investmentList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '20px',
+    marginTop: '20px',
+  },
+  card: {
+    flex: '1 1 calc(33.333% - 20px)',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    padding: '15px',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+
+  },
+  // Media queries para responsividad
+  '@media (max-width: 992px)': {
+    card: {
+      flex: '1 1 calc(50% - 20px)',
+    },
+  },
+  '@media (max-width: 600px)': {
+    card: {
+      flex: '1 1 100%',
+    },
   },
 };
 
