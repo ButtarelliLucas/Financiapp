@@ -1,17 +1,17 @@
 // src/pages/Login.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useStore from '../store';
-import { apiLogin } from '../api/api'; // Importa 'apiLogin' correctamente
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useStore from "../store";
+import { apiLogin } from "../api/api";
 
 const Login = () => {
-  const [account, setAccount] = useState('');
-  const [password, setPassword] = useState('');
+  const [account, setAccount] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
-  const loginStore = useStore((state) => state.login); // Evitar conflictos de nombres
+  const loginStore = useStore((state) => state.login);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +19,9 @@ const Login = () => {
     setError(null);
 
     try {
-      // Llama a la función de login del API simulada
-      const userData = await apiLogin(account, password); // Usa 'apiLogin' correctamente
-      // Llama a la acción de login del store para actualizar el estado global
+      const userData = await apiLogin(account, password);
       loginStore(userData);
-      // Redirige al usuario al dashboard o página protegida
-      navigate('/mi-cuenta');
+      navigate("/mi-cuenta");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -33,90 +30,69 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label htmlFor="account">Cuenta:</label>
+    <div className="max-w-md mx-auto mt-12 p-6 border border-gray-600 rounded-md bg-gray-800 text-white">
+      <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div>
+          <label
+            htmlFor="account"
+            className="block text-sm font-medium text-gray-300"
+          >
+            Cuenta:
+          </label>
           <input
             type="text"
             id="account"
             value={account}
             onChange={(e) => setAccount(e.target.value)}
             required
-            style={styles.input}
+            className="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500"
           />
         </div>
-        <div style={styles.inputGroup}>
-          <label htmlFor="password">Contraseña:</label>
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-300"
+          >
+            Contraseña:
+          </label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={styles.input}
+            className="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500"
           />
         </div>
-        {error && <p style={styles.error}>{error}</p>}
-        <button type="submit" disabled={loading} style={styles.button}>
-          {loading ? 'Iniciando...' : 'Iniciar Sesión'}
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
+        )}
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full px-4 py-2 rounded-md text-white ${
+            loading
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          {loading ? "Iniciando..." : "Iniciar Sesión"}
         </button>
       </form>
-      <div style={styles.credentials}>
-        <p><strong>Credenciales de Prueba:</strong></p>
-        <p>Cuenta: <code>test_user</code>, Contraseña: <code>password123!</code></p>
-        <p>Cuenta: <code>admin_user</code>, Contraseña: <code>adminpassword!</code></p>
+      <div className="mt-6 p-4 bg-gray-700 rounded-md text-sm">
+        <p className="font-bold">Credenciales de Prueba:</p>
+        <p>
+          Cuenta: <code className="text-blue-400">test_user</code>, Contraseña:{" "}
+          <code className="text-blue-400">password123!</code>
+        </p>
+        <p>
+          Cuenta: <code className="text-blue-400">admin_user</code>, Contraseña:{" "}
+          <code className="text-blue-400">adminpassword!</code>
+        </p>
       </div>
     </div>
   );
-};
-
-// Estilos básicos
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '50px auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '5px',
-    backgroundColor: '#212121',
-    color: '#fff', // Asegura que el texto sea visible sobre el fondo oscuro
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  inputGroup: {
-    marginBottom: '15px',
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    marginTop: '5px',
-    boxSizing: 'border-box',
-    borderRadius: '3px',
-    border: '1px solid #ccc',
-  },
-  button: {
-    padding: '10px',
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: '3px',
-    fontSize: '16px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '15px',
-  },
-  credentials: {
-    marginTop: '20px',
-    backgroundColor: '#333',
-    padding: '10px',
-    borderRadius: '5px',
-  },
 };
 
 export default Login;
