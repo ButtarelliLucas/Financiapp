@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 p-6 border border-gray-600 rounded-md bg-gray-800 text-white">
+    <div className="max-w-md mx-auto p-6 border border-gray-600 rounded-md bg-gray-800 text-white">
       
       <div className="flex justify-center items-center mb-6">
         <img src="/Smartans.png" alt="Smartans" className="w-1/2" />
