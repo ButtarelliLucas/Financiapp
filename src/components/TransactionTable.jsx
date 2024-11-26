@@ -55,9 +55,13 @@ const TransactionTable = () => {
                 <td className="py-2 px-4">{transaction.amount}</td>
                 <td
                   className={`py-2 px-4 ${
-                    transaction.status === "Paid"
+                    transaction.status === "Ingreso"
                       ? "text-green-500"
-                      : transaction.status === "Overdue"
+                      : transaction.status === "Deposito"
+                      ? "text-green-500"
+                      : transaction.status === "Extracción"
+                      ? "text-red-500"
+                      : transaction.status === "Venta"
                       ? "text-red-500"
                       : "text-gray-500"
                   }`}
