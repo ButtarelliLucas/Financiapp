@@ -30,14 +30,11 @@ const Login = () => {
   };
 
   return (
-   <div>
-    <div className="flex justify-center items-center mb-6">
-        <img src="/Smartans.png" alt="Smartans" className="w-1/2" />
-      </div>
-
     <div className="max-w-md mx-auto mt-12 p-6 border border-gray-600 rounded-md bg-gray-800 text-white">
       
-      
+      <div className="flex justify-center items-center ">
+        <img src="/Smartans.png" alt="Smartans" className="w-1/2" />
+      </div>
 
       <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -99,7 +96,6 @@ const Login = () => {
           <code className="text-blue-400">adminpassword!</code>
         </p>
       </div>
-    </div>
     </div>
   );
 };
