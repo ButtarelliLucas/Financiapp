@@ -47,12 +47,32 @@ const Dashboard = () => {
 
   // Configuración del gráfico de barras
   const barData = {
-    labels: investments.map(inv => inv.type),
+    labels: investments.map((inv) => inv.type),
     datasets: [
       {
-        label: 'Monto de Inversión',
-        data: investments.map(inv => inv.amount),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        label: "Monto de Inversión",
+        data: investments.map((inv) => inv.amount),
+        backgroundColor: [
+          "#398389", // Gris moderno
+          "#26BEC9", // Cian claro
+          "#00ACC1", // Cian
+          "#8E24AA", // Violeta
+          "#1E88E5", // Azul vibrante
+          "#43A047", // Verde vibrante
+          "#FB8C00", // Naranja
+          "#E53935", // Rojo suave
+        ],
+        borderColor: [
+          "#1B6267", // Tonos más oscuros para bordes
+          "#1C9AA5",
+          "#007E96",
+          "#6A1B9A",
+          "#1565C0",
+          "#2E7D32",
+          "#EF6C00",
+          "#C62828",
+        ],
+        borderWidth: 1,
       },
     ],
   };
@@ -60,8 +80,25 @@ const Dashboard = () => {
   const barOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
+    plugins: {   
+      legend: {
 
+      labels: {
+        color: "#FFFFFF", // Texto blanco para la leyenda en fondos oscuros
+        font: {
+          size: 14,
+          family: "Roboto, Arial, sans-serif", // Fuente consistente
+        },
+      },
+    },
+    tooltip: {
+      backgroundColor: "#333333", // Fondo oscuro para los tooltips
+      titleColor: "#FFFFFF", // Título en blanco
+      bodyColor: "#FFFFFF", // Texto en blanco
+      borderColor: "#26BEC9", // Borde cian para destacar
+      borderWidth: 1,
+
+    },
     },
   };
 
@@ -83,40 +120,51 @@ const Dashboard = () => {
         label: 'Porción de Inversión',
         data: Object.values(groupedInvestments),
         backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
-          '#FFCD56',
-          '#C9CBCF',
+          "#398389", // Gris moderno
+          "#26BEC9", // 
+          "#00ACC1", // Cian
+          "#8E24AA", // Violeta
+          "#1E88E5", // Azul vibrante
+          "#43A047", // Verde vibrante
+          "#FB8C00", // Naranja
+          "#E53935", // Rojo suave
         ],
         hoverOffset: 4,
       },
     ],
   };
-
-  const pieOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'right',
+const pieOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "right",
+      labels: {
+        color: "#FFFFFF", // Texto blanco para la leyenda en fondos oscuros
+        font: {
+          size: 14,
+          family: "Roboto, Arial, sans-serif", // Fuente consistente
+        },
       },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const label = context.label || '';
-            const value = context.parsed;
-            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-            const percentage = ((value / total) * 100).toFixed(2);
-            return `${label}: ${percentage}%`;
-          }
-        }
-      }
     },
-  };
+    tooltip: {
+      backgroundColor: "#333333", // Fondo oscuro para los tooltips
+      titleColor: "#FFFFFF", // Título en blanco
+      bodyColor: "#FFFFFF", // Texto en blanco
+      borderColor: "#26BEC9", // Borde cian para destacar
+      borderWidth: 1,
+      callbacks: {
+        label: function (context) {
+          const label = context.label || "";
+          const value = context.parsed;
+          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+          const percentage = ((value / total) * 100).toFixed(2);
+          return `${label}: ${percentage}%`;
+        },
+      },
+    },
+  },
+};
 
   if (!session.isLoggedIn) {
     return (
@@ -173,11 +221,11 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
-      <TransactionTable />
+
 {/* Gráficos */}
 <div className="mt-10 flex flex-col md:flex-row justify-between items-start gap-6">
   {/* Gráfico de Pastel */}
-  <div className="bg-gray-800 w-full p-6 flex-1 rounded-md shadow-md overflow-hidden">
+  <div className="bg-gray-800 w-full p-6 flex-1 rounded-md shadow-md ">
     <h4 className="text-xl font-semibold mb-4 text-center text-white">
       Distribución de Inversiones
     </h4>
@@ -194,6 +242,9 @@ const Dashboard = () => {
       <Bar className="w-full p-2 h-full max-w-full max-h-full" data={barData} options={barOptions} />
     </div>
   </div>
+</div>
+<div className="mt-10">
+<TransactionTable />
 </div>
 
 
