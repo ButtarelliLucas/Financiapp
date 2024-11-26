@@ -17,8 +17,8 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: "Inicio", path: "/" },
-    { name: "Mi Cuenta", path: "/mi-cuenta", protected: true },
+    // { name: "Inicio", path: "/" },
+    { name: "Dashboard", path: "/mi-cuenta", protected: true },
     { name: "Configuración", path: "/configuracion", adminOnly: true },
   ];
 
@@ -49,14 +49,14 @@ const Navbar = () => {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+              className="bg-gray-700 hover:bg-red-600 text-white px-4 py-2 rounded-md"
             >
               Cerrar Sesión
             </button>
           ) : (
             <Link
               to="/login"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-gray-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
             >
               Iniciar Sesión
             </Link>
