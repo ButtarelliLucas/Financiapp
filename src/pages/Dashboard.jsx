@@ -13,6 +13,7 @@ import {
   PieController
 } from 'chart.js';
 import SessionTimer from '../components/SessionTimer';
+import TransactionTable from '../components/TransactionTable';
 
 ChartJS.register(
   CategoryScale, 
@@ -60,13 +61,7 @@ const Dashboard = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Inversiones por Tipo',
-      },
+
     },
   };
 
@@ -109,10 +104,6 @@ const Dashboard = () => {
       legend: {
         position: 'right',
       },
-      title: {
-        display: true,
-        text: 'Distribución de Inversiones por Tipo',
-      },
       tooltip: {
         callbacks: {
           label: function(context) {
@@ -140,10 +131,10 @@ const Dashboard = () => {
   {/* Encabezado con Dashboard, Bienvenida y Saldo Total */}
   <div className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg mb-8 w-full">
     <div className="flex-1 text-white text-center md:text-left">
-      <h2 className="text-3xl font-semibold mb-2">Dashboard</h2>
-      <p className="text-lg">Bienvenido, {userInfo.name}!</p>
+      <h2 className="text-3xl font-semibold mb-2">Balance</h2>
+      <p className="text-lg">Bienvenido, <stroke className="font-semibold" >{userInfo.name}!</stroke></p> 
     </div>
-    <div className="flex-1 bg-green-500 text-white p-6 rounded-lg shadow-lg text-center mt-4 md:mt-0">
+    <div className="flex-1 w-full bg-green-500 text-white p-6 rounded-lg shadow-lg text-center mt-4 md:mt-0">
       <h3 className="text-2xl font-semibold">Saldo Total</h3>
       <p className="text-4xl font-bold mt-2">
         ${isLoadingInvestments ? '...' : totalBalance.toLocaleString()}
@@ -163,11 +154,11 @@ const Dashboard = () => {
   ) : investments.length > 0 ? (
     <>
       {/* Lista de Inversiones en Tarjetas */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
         {investments.map((inv) => (
           <div
             key={inv.id}
-            className="bg-gray-900 shadow-md rounded-lg p-6 border border-gray-700"
+            className="bg-gray-800 shadow-md rounded-lg p-6 border border-gray-700"
           >
             <h4 className="text-xl font-semibold mb-2 text-white">{inv.type}</h4>
             <p className="mb-1 text-gray-300">
@@ -182,22 +173,30 @@ const Dashboard = () => {
           </div>
         ))}
       </div>
+      <TransactionTable />
+{/* Gráficos */}
+<div className="mt-10 flex flex-col md:flex-row justify-between items-start gap-6">
+  {/* Gráfico de Pastel */}
+  <div className="bg-gray-800 w-full p-6 flex-1 rounded-md shadow-md overflow-hidden">
+    <h4 className="text-xl font-semibold mb-4 text-center text-white">
+      Distribución de Inversiones
+    </h4>
+    <div className="flex justify-center items-center h-full">
+      <Pie className="w-full p-2 h-full max-w-full max-h-full" data={pieData} options={pieOptions} />
+    </div>
+  </div>
+  {/* Gráfico de Barras */}
+  <div className="bg-gray-800 w-full p-6 flex-1  rounded-md shadow-md overflow-hidden">
+    <h4 className="text-xl font-semibold mb-4 text-center text-white">
+      Inversiones por Tipo
+    </h4>
+    <div className="flex justify-center items-center h-full">
+      <Bar className="w-full p-2 h-full max-w-full max-h-full" data={barData} options={barOptions} />
+    </div>
+  </div>
+</div>
 
-      {/* Gráficos */}
-      <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="w-full md:w-1/2 lg:w-1/3 h-80">
-          <h4 className="text-xl font-semibold mb-4 text-center text-white">
-            Distribución de Inversiones por Tipo
-          </h4>
-          <Pie data={pieData} options={pieOptions} />
-        </div>
-        <div className="w-full md:w-1/2 lg:w-2/3 h-80">
-          <h4 className="text-xl font-semibold mb-4 text-center text-white">
-            Inversiones por Tipo
-          </h4>
-          <Bar data={barData} options={barOptions} />
-        </div>
-      </div>
+
     </>
   ) : (
     <p className="text-center text-white">No tienes inversiones registradas.</p>

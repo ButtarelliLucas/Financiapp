@@ -26,9 +26,9 @@ const Navbar = () => {
     <header className="bg-gray-900 text-white shadow-md fixed w-full top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold flex items-center">
-          <span className="mr-2">🌟</span>
-          FinanciApp
+        <Link to="/" className=" flex items-center">
+        <img src="/Smartans final blanco.png" alt="Smartans Logo" className="h-12 w-auto" />
+
         </Link>
 
         {/* Desktop Navigation */}
