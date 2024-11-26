@@ -79,7 +79,7 @@ const Login = () => {
           className={`w-full px-4 py-2 rounded-md text-white ${
             loading
               ? "bg-gray-600 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
+              : "bg-cyan-600 hover:bg-cyan-700"
           }`}
         >
           {loading ? "Iniciando..." : "Iniciar Sesión"}

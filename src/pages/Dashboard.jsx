@@ -182,7 +182,7 @@ const pieOptions = {
       <h2 className="text-3xl font-semibold mb-2">Balance</h2>
       <p className="text-lg">Bienvenido, <stroke className="font-semibold" >{userInfo.name}!</stroke></p> 
     </div>
-    <div className="flex-1 w-full bg-green-500 text-white p-6 rounded-lg shadow-lg text-center mt-4 md:mt-0">
+    <div className="flex-1 w-full bg-cyan-500 text-white p-6 rounded-lg shadow-lg text-center mt-4 md:mt-0">
       <h3 className="text-2xl font-semibold">Saldo Total</h3>
       <p className="text-4xl font-bold mt-2">
         ${isLoadingInvestments ? '...' : totalBalance.toLocaleString()}

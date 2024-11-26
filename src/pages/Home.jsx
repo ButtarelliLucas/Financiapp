@@ -22,7 +22,7 @@ const Home = () => {
           </p>
           {!isLoggedIn ? (
             <Link to="/login">
-              <button className="bg-gray-700 hover:bg-blue-600 text-white px-6 py-3 rounded-md text-lg">
+              <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-md text-lg">
                 Comenzar Ahora
               </button>
             </Link>
@@ -73,7 +73,7 @@ const Home = () => {
             ¿Listo para gestionar tus inversiones como un experto?
           </h2>
           <Link to="/login">
-            <button className="bg-gray-700 hover:bg-blue-600 text-white px-6 py-3 rounded-md text-lg">
+            <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-md text-lg">
               Registrarse Ahora
             </button>
           </Link>
