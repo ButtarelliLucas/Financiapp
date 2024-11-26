@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import { useEffect } from 'react';
 import useStore from '../store';
 import { Bar, Pie } from 'react-chartjs-2';
@@ -34,6 +33,7 @@ const Dashboard = () => {
   const investmentsError = useStore((state) => state.investmentsError);
   const loadInvestments = useStore((state) => state.loadInvestments);
 
+  // Cargar inversiones cuando el usuario está logueado
   useEffect(() => {
     if (session.isLoggedIn && userInfo.token) {
       loadInvestments(userInfo.token);
@@ -41,7 +41,10 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo.token]);
 
-  // Preparar datos para el gráfico de barras
+  // Calcular el saldo total
+  const totalBalance = investments.reduce((sum, inv) => sum + inv.amount, 0);
+
+  // Configuración del gráfico de barras
   const barData = {
     labels: investments.map(inv => inv.type),
     datasets: [
@@ -55,6 +58,7 @@ const Dashboard = () => {
 
   const barOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
@@ -76,7 +80,7 @@ const Dashboard = () => {
     return acc;
   }, {});
 
-  // Preparar datos para el gráfico de torta
+  // Configuración del gráfico de torta
   const pieData = {
     labels: Object.keys(groupedInvestments),
     datasets: [
@@ -100,6 +104,7 @@ const Dashboard = () => {
 
   const pieOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'right',
@@ -123,97 +128,83 @@ const Dashboard = () => {
   };
 
   if (!session.isLoggedIn) {
-    return <p>No estás autenticado. Por favor, inicia sesión.</p>;
+    return (
+      <div className="container w-full mx-auto px-4 py-8">
+        <p className="text-center text-lg text-white">No estás autenticado. Por favor, inicia sesión.</p>
+      </div>
+    );
   }
 
   return (
-    <div style={styles.container}>
-      <h2>Dashboard</h2>
-      <p>Bienvenido, {userInfo.name}!</p>
-      
-      <SessionTimer /> {/* Añadir el contador de sesión */}
-      
-      <h3>Tus Inversiones</h3>
-      
-      {isLoadingInvestments ? (
-        <p>Cargando inversiones...</p>
-      ) : investmentsError ? (
-        <p style={styles.error}>Error: {investmentsError}</p>
-      ) : investments.length > 0 ? (
-        <>
-          {/* Lista de Inversiones en Tarjetas */}
-          <div style={styles.investmentList}>
-            {investments.map((inv) => (
-              <div className= "bg-gray-900" key={inv.id} style={styles.card}>
-                <h4>{inv.type}</h4>
-                <p><strong>Monto:</strong> ${inv.amount.toLocaleString()}</p>
-                <p><strong>Fecha:</strong> {inv.date}</p>
-                <p><strong>Estado:</strong> {inv.status}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Gráfico de Torta */}
-          <div style={styles.chartContainer}>
-            <Pie data={pieData} options={pieOptions} />
-          </div>
-          
-          {/* Gráfico de Barras */}
-          <div style={styles.chartContainer}>
-            <Bar data={barData} options={barOptions} />
-          </div>
-        </>
-      ) : (
-        <p>No tienes inversiones registradas.</p>
-      )}
+    <div className="container mx-auto px-4 py-8 pb-24">
+  {/* Encabezado con Dashboard, Bienvenida y Saldo Total */}
+  <div className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-6 rounded-lg shadow-lg mb-8 w-full">
+    <div className="flex-1 text-white text-center md:text-left">
+      <h2 className="text-3xl font-semibold mb-2">Dashboard</h2>
+      <p className="text-lg">Bienvenido, {userInfo.name}!</p>
     </div>
+    <div className="flex-1 bg-green-500 text-white p-6 rounded-lg shadow-lg text-center mt-4 md:mt-0">
+      <h3 className="text-2xl font-semibold">Saldo Total</h3>
+      <p className="text-4xl font-bold mt-2">
+        ${isLoadingInvestments ? '...' : totalBalance.toLocaleString()}
+      </p>
+    </div>
+  </div>
+
+  <SessionTimer />
+
+  {/* Título de Inversiones */}
+  <h3 className="text-2xl font-medium mt-8 mb-4 text-white">Tus Inversiones</h3>
+
+  {isLoadingInvestments ? (
+    <p className="text-center text-white">Cargando inversiones...</p>
+  ) : investmentsError ? (
+    <p className="text-red-500 text-center">Error: {investmentsError}</p>
+  ) : investments.length > 0 ? (
+    <>
+      {/* Lista de Inversiones en Tarjetas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {investments.map((inv) => (
+          <div
+            key={inv.id}
+            className="bg-gray-900 shadow-md rounded-lg p-6 border border-gray-700"
+          >
+            <h4 className="text-xl font-semibold mb-2 text-white">{inv.type}</h4>
+            <p className="mb-1 text-gray-300">
+              <strong>Monto:</strong> ${inv.amount.toLocaleString()}
+            </p>
+            <p className="mb-1 text-gray-300">
+              <strong>Fecha:</strong> {inv.date}
+            </p>
+            <p className="mb-1 text-gray-300">
+              <strong>Estado:</strong> {inv.status}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Gráficos */}
+      <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="w-full md:w-1/2 lg:w-1/3 h-80">
+          <h4 className="text-xl font-semibold mb-4 text-center text-white">
+            Distribución de Inversiones por Tipo
+          </h4>
+          <Pie data={pieData} options={pieOptions} />
+        </div>
+        <div className="w-full md:w-1/2 lg:w-2/3 h-80">
+          <h4 className="text-xl font-semibold mb-4 text-center text-white">
+            Inversiones por Tipo
+          </h4>
+          <Bar data={barData} options={barOptions} />
+        </div>
+      </div>
+    </>
+  ) : (
+    <p className="text-center text-white">No tienes inversiones registradas.</p>
+  )}
+</div>
+
   );
-};
-
-// Estilos mejorados
-const styles = {
-  container: {
-    padding: '20px',
-    paddingBottom: '100px',
-    position: 'relative',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  error: {
-    color: 'red',
-  },
-  chartContainer: {
-    marginTop: '30px',
-    width: '100%',
-    maxWidth: '600px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  investmentList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '20px',
-    marginTop: '20px',
-  },
-  card: {
-    flex: '1 1 calc(33.333% - 20px)',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '15px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-
-  },
-  // Media queries para responsividad
-  '@media (max-width: 992px)': {
-    card: {
-      flex: '1 1 calc(50% - 20px)',
-    },
-  },
-  '@media (max-width: 600px)': {
-    card: {
-      flex: '1 1 100%',
-    },
-  },
 };
 
 export default Dashboard;

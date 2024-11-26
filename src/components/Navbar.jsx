@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import { Menu, X } from "lucide-react"; // Iconos para el menú
 import  useStore  from "../store";
 
@@ -8,10 +8,12 @@ const Navbar = () => {
   const userInfo = useStore((state) => state.userInfo);
   const isLoggedIn = useStore((state) => state.session.isLoggedIn);
   const logout = useStore((state) => state.logout);
+  const navigate = useNavigate(); // Inicializar navigate
 
   const handleLogout = async () => {
     console.log("Navbar - Cerrar sesión");
     await logout();
+    navigate("/", { replace: true }); // Redirigir al inicio con reemplazo en el historial
   };
 
   const navLinks = [

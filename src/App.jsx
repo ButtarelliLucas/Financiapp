@@ -42,7 +42,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <div className="main-content">
+      <div className="main-content w-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
