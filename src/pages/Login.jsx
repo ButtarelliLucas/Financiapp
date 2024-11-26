@@ -31,12 +31,17 @@ const Login = () => {
 
   return (
     <div className="max-w-md mx-auto mt-12 p-6 border border-gray-600 rounded-md bg-gray-800 text-white">
-      <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
+      
+      <div className="flex justify-center items-center mb-6">
+        <img src="/Smartans.png" alt="Smartans" className="w-1/2" />
+      </div>
+
+      {/* <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2> */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label
             htmlFor="account"
-            className="block text-sm font-medium text-gray-300"
+            className="block text-md font-medium text-gray-300"
           >
             Cuenta:
           </label>
@@ -52,7 +57,7 @@ const Login = () => {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-300"
+            className="block text-md font-medium text-gray-300"
           >
             Contraseña:
           </label>

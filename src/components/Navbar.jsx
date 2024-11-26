@@ -17,7 +17,7 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    // { name: "Inicio", path: "/" },
+
     { name: "Dashboard", path: "/mi-cuenta", protected: true },
     { name: "Configuración", path: "/configuracion", adminOnly: true },
   ];

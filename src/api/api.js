@@ -23,22 +23,22 @@ export const users = [
     'fake-jwt-token-user': [
       {
         id: 1,
-        type: 'Botones',
-        amount: 1,
+        type: 'Dolares',
+        amount: 32500,
         date: '2023-10-01',
         status: 'Activo',
       },
       {
         id: 2,
-        type: 'Pelusas',
-        amount: 2,
+        type: 'Crypto',
+        amount: 26000,
         date: '2023-09-15',
         status: 'Activo',
       },
       {
         id: 3,
-        type: 'Moneditas',
-        amount: 6,
+        type: 'Cripto',
+        amount: 70000,
         date: '2023-09-21',
         status: 'Activo',
       },
@@ -46,14 +46,14 @@ export const users = [
     'fake-jwt-token-admin': [
       {
         id: 4,
-        type: 'Fondos Mutuos',
+        type: 'Dolares',
         amount: 20000,
         date: '2023-08-20',
         status: 'Activo',
       },
       {
         id: 5,
-        type: 'Bienes Raíces',
+        type: 'Cedears',
         amount: 150000,
         date: '2023-07-10',
         status: 'Inactivo',
